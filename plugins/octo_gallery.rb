@@ -40,7 +40,7 @@ module Jekyll
       out = '' #'<a class="octogallery" href="hello"><img src="hello.jpg"></a>'
       @images.each_index do |i|
         out << <<-EOF
-<a class="octogallery" href="/images/#{@images[i]}">
+<a class="octo_gallery" href="/images/#{@images[i]}">
   <img src="/images/#{@thumbed_images[i]}">
 </a>
         EOF
@@ -52,7 +52,7 @@ module Jekyll
 end
 
 Liquid::Template.register_tag('octogallery', Jekyll::OctoGallery)
-
+Liquid::Template.register_tag('octo_gallery', Jekyll::OctoGallery)
 
 # class Random < Liquid::Block
 #   def initialize(tag_name, markup, tokens)
