@@ -10,22 +10,27 @@ $.domReady(function () {
 
   $(document)
     .bind('keydown', function (e) {
-      if (e.keyCode === 27 && $('#octo_gallery_overlay').css('display') !== 'none') {
-        e.preventDefault()
-        octo_close()
+      if ($('#octo_gallery_overlay').css('display') !== 'none') {
+        // ESC
+        if (e.keyCode === 27) {
+          e.preventDefault()
+          octo_close()
+        } else
+        // arrow left
+        if (e.keyCode === 37) {
+          octo_navigate('down')
+        } else
+        // arrow right
+        if (e.keyCode === 39) {
+          octo_navigate('up')
+        }
       }
     })
 
   $('a.octo_gallery')
     .bind('click', function (e) {
       e.preventDefault()
-      $('#octo_gallery_image').attr('src', $(this).attr('href')).load(function() {
-        $(this).attr('data-width',  $(this).width())
-        $(this).attr('data-height', $(this).height())
-        set_image_dimensions()
-      })
-      $('#octo_gallery_counter').text(get_position($(this)) + "/" + ($(this).siblings('a[rel~="'+$('a.octo_gallery').attr('rel')+'"]').length+1));
-      $('#octo_gallery_alt').text($(this).children('img').attr('alt'))
+      octo_open($(this))
       $('#octo_gallery_image_container').css('display', 'block')
       $('#octo_gallery_overlay').css('display', 'block')
     })
@@ -38,6 +43,11 @@ $.domReady(function () {
   $('#octo_gallery_overlay')
     .bind('click', function (e) {
       octo_close()
+    })
+
+  $('#octo_gallery_image')
+    .bind('click', function (e) {
+      octo_navigate('up')
     })
 
   function set_image_dimensions() {
@@ -65,21 +75,52 @@ $.domReady(function () {
     $('#octo_gallery_counter').css('top', current_h - 80)
   }
 
+  function octo_open(node) {
+    $('#octo_gallery_image').attr('rel', node.attr('rel'))
+    $('#octo_gallery_image').attr('src', node.attr('href')).load(function() {
+      node.attr('data-width',  node.width())
+      node.attr('data-height', node.height())
+      set_image_dimensions()
+    })
+    $('#octo_gallery_counter').text(get_position(node) + "/" + (node.siblings('a[rel~="'+$('a.octo_gallery').attr('rel')+'"]').length+1))
+    $('#octo_gallery_alt').text(node.children('img').attr('alt'))
+  }
+
   function octo_close() {
     $('#octo_gallery_overlay').css('display', 'none')
     $('#octo_gallery_image_container').css('display', 'none')
   }
 
+  function octo_navigate(direction) {
+    var current_gallery = $('#octo_gallery_image').attr('rel')
+    var current_src     = $('#octo_gallery_image').attr('src')
+    var current_images  = $('a.octo_gallery[rel~="'+current_gallery+'"]')
+    var current_image   = $('a.octo_gallery[rel~="'+current_gallery+'"][href="'+current_src+'"]')
+    if (direction === 'down') {
+      if (current_image.previous().length !== 0) {
+        octo_open(current_image.previous())
+      } else {
+        octo_open(current_images.last())
+      }
+    } else
+    if (direction === 'up') {
+      if (current_image.next().length !== 0) {
+        octo_open(current_image.next())
+      } else {
+        octo_open(current_images.first())
+      }
+    }
+  }
+
   function get_position(node) {
     var title = node.attr('rel')
-    console.log(title)
     var elements = $('a.octo_gallery[rel~="'+title+'"]')
-    var current;
+    var current
     elements.each(function(el, index){
       if ($(el).attr('href') == node.attr('href')) {
-        current = index;
+        current = index
       }
     })
-    return current+1;
+    return current+1
   }
 })
