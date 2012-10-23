@@ -18,16 +18,16 @@ module Jekyll
         image[:thumb] = "#{dir}/#{name}-thumb#{extension}"
 
         unless File.exists?("#{base_path}#{image[:thumb]}")
-          print "generating thumb for #{file}..."
-          image = MiniMagick::Image.open("#{base_path}#{file}")
-          image.resize  "100x100^"
-          width, height = image[:dimensions]
+          print "generating thumb for #{image[:src]}..."
+          thumb = MiniMagick::Image.open("#{base_path}#{image[:src]}")
+          thumb.resize  "100x100^"
+          width, height = thumb[:dimensions]
           if width > height
-            image.crop "100x100+#{(width-100)/2}+0"
+            thumb.crop "100x100+#{(width-100)/2}+0"
           elsif width < height
-            image.crop "100x100+0+#{(height-100)/2}"
+            thumb.crop "100x100+0+#{(height-100)/2}"
           end
-          image.write  "#{base_path}#{image[:thumb]}"
+          thumb.write  "#{base_path}#{image[:thumb]}"
           puts "done!"
         end
       end
