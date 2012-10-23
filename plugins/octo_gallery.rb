@@ -5,18 +5,19 @@ module Jekyll
     def initialize(tag_name, markup, tokens)
       base_path = 'source/images/'
       @images   = tokens[0].strip.split("\n")
-      @thumbed_images = []
+      @images.map!{|line| {src: line[/^[^\s]+/], alt: line.gsub(/^[^\s]+/, '').strip}}
 
-      @images.each do |file|
+
+      @images.each do |image|
         #remove prefixed slashes
-        file.slice!(0) if file[0] == '/'
-        dir       = File.dirname(file)
-        extension = File.extname(file)
-        name      = File.basename(file, extension)
+        image[:src].slice!(0) if image[:src][0] == '/'
+        dir       = File.dirname(image[:src])
+        extension = File.extname(image[:src])
+        name      = File.basename(image[:src], extension)
 
-        thumbed_image = "#{dir}/#{name}-thumb#{extension}"
+        image[:thumb] = "#{dir}/#{name}-thumb#{extension}"
 
-        unless File.exists?("#{base_path}#{thumbed_image}")
+        unless File.exists?("#{base_path}#{image[:thumb]}")
           print "generating thumb for #{file}..."
           image = MiniMagick::Image.open("#{base_path}#{file}")
           image.resize  "100x100^"
@@ -26,11 +27,9 @@ module Jekyll
           elsif width < height
             image.crop "100x100+0+#{(height-100)/2}"
           end
-          image.write  "#{base_path}#{thumbed_image}"
+          image.write  "#{base_path}#{image[:thumb]}"
           puts "done!"
         end
-
-        @thumbed_images << thumbed_image
       end
 
       super
@@ -38,10 +37,10 @@ module Jekyll
 
     def render(context)
       out = '' #'<a class="octogallery" href="hello"><img src="hello.jpg"></a>'
-      @images.each_index do |i|
+      @images.each do |image|
         out << <<-EOF
-<a class="octo_gallery" href="/images/#{@images[i]}">
-  <img src="/images/#{@thumbed_images[i]}">
+<a class="octo_gallery" href="/images/#{image[:src]}">
+  <img src="/images/#{image[:thumb]}" alt="#{image[:alt]}">
 </a>
         EOF
       end

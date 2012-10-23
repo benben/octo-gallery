@@ -1,12 +1,12 @@
 $.domReady(function () {
   $('body')
     .append('<div id="octo_gallery_overlay"></div>')
-    .append('<div id="octo_gallery_image_container"><img id="octo_gallery_image" src="" alt=""></div>')
+    .append('<div id="octo_gallery_image_container"><img id="octo_gallery_image" src="" alt=""><p id="octo_gallery_alt"></p></div>')
 
   $(window)
     .bind('resize', function (e) {
       console.log('hello')
-      set_image_dimension()
+      set_image_dimensions()
     })
 
   $(document)
@@ -26,13 +26,14 @@ $.domReady(function () {
       $('#octo_gallery_image').attr('src', $(this).attr('href')).load(function() {
         $(this).attr('data-width',  $(this).width())
         $(this).attr('data-height', $(this).height())
-        set_image_dimension()
+        set_image_dimensions()
       })
+      $('#octo_gallery_alt').text($(this).children('img').attr('alt'))
       $('#octo_gallery_image_container').css('display', 'block')
       $('#octo_gallery_overlay').css('display', 'block')
     })
 
-  function set_image_dimension() {
+  function set_image_dimensions() {
     var body_w     = $('body').width()
     var body_h     = $('body').height()
     var original_w = $('#octo_gallery_image').attr('data-width')

@@ -26,4 +26,10 @@ a.octo_gallery {
 
 #octo_gallery_image {
   margin:10px;
+  margin-bottom: 0px;
+}
+
+#octo_gallery_alt {
+  margin: 10px;
+  margin-top: 0px;
 }
