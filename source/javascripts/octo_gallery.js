@@ -1,7 +1,7 @@
 $.domReady(function () {
   $('body')
     .append('<div id="octo_gallery_overlay"></div>')
-    .append('<div id="octo_gallery_image_container"><img id="octo_gallery_image" src="" alt=""><p id="octo_gallery_alt"></p></div>')
+    .append('<div id="octo_gallery_image_container"><img id="octo_gallery_image" src="" alt=""><div id="octo_gallery_close"></div><p id="octo_gallery_alt"></p></div>')
 
   $(window)
     .bind('resize', function (e) {
@@ -13,10 +13,7 @@ $.domReady(function () {
     .bind('keydown', function (e) {
       if (e.keyCode === 27 && $('#octo_gallery_overlay').css('display') !== 'none') {
         e.preventDefault()
-        console.log(e.keyCode)
-        console.log(e.keyIdentifier)
-        $('#octo_gallery_overlay').css('display', 'none')
-        $('#octo_gallery_image_container').css('display', 'none')
+        octo_close()
       }
     })
 
@@ -31,6 +28,16 @@ $.domReady(function () {
       $('#octo_gallery_alt').text($(this).children('img').attr('alt'))
       $('#octo_gallery_image_container').css('display', 'block')
       $('#octo_gallery_overlay').css('display', 'block')
+    })
+
+  $('#octo_gallery_close')
+    .bind('click', function (e) {
+      octo_close()
+    })
+
+  $('#octo_gallery_overlay')
+    .bind('click', function (e) {
+      octo_close()
     })
 
   function set_image_dimensions() {
@@ -48,9 +55,16 @@ $.domReady(function () {
         $('#octo_gallery_image').css('width', calculated_w)
       }
       $('#octo_gallery_image_container').css('left', (body_w - current_w) / 2)
+      $('#octo_gallery_close').css('left', current_w - 45)
     } else {
       $('#octo_gallery_image_container').css('left', 0)
+      $('#octo_gallery_close').css('left', current_w - 45)
       $('#octo_gallery_image').css('width', calculated_w)
     }
+  }
+
+  function octo_close() {
+    $('#octo_gallery_overlay').css('display', 'none')
+    $('#octo_gallery_image_container').css('display', 'none')
   }
 })

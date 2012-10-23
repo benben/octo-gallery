@@ -33,3 +33,25 @@ a.octo_gallery {
   margin: 10px;
   margin-top: 0px;
 }
+
+#octo_gallery_close {
+  top: 20px;
+  left: 0px;
+  width: 25px;
+  height: 25px;
+  position: absolute;
+  background: #000;
+  opacity: 0.5;
+  border: 0px;
+  color: #fff;
+  font-size: 38px;
+  font-weight: bold;
+  display: inline-block;
+  line-height: 24px;
+  text-align: center;
+  cursor: pointer;
+}
+
+#octo_gallery_close:before{
+ content: "×";
+}
