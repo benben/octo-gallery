@@ -4,9 +4,9 @@ module Jekyll
   class OctoGallery < Liquid::Block
     def initialize(tag_name, markup, tokens)
       base_path = 'source/images/'
+      @title    = markup != '' ? markup.strip : Digest::SHA1.hexdigest(tokens.join)
       @images   = tokens[0].strip.split("\n")
       @images.map!{|line| {src: line[/^[^\s]+/], alt: line.gsub(/^[^\s]+/, '').strip}}
-
 
       @images.each do |image|
         #remove prefixed slashes
@@ -39,7 +39,7 @@ module Jekyll
       out = '' #'<a class="octogallery" href="hello"><img src="hello.jpg"></a>'
       @images.each do |image|
         out << <<-EOF
-<a class="octo_gallery" href="/images/#{image[:src]}">
+<a class="octo_gallery" rel="#{@title}" href="/images/#{image[:src]}">
   <img src="/images/#{image[:thumb]}" alt="#{image[:alt]}">
 </a>
         EOF
