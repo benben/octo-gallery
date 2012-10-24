@@ -69,10 +69,7 @@ $.domReady(function () {
       $('#octo_gallery_image_container').css('left', 0)
       $('#octo_gallery_image').css('width', calculated_w)
     }
-
-    $('#octo_gallery_close').css('left', current_w - 45)
-    $('#octo_gallery_counter').css('left', current_w - 45)
-    $('#octo_gallery_counter').css('top', current_h - 80)
+    $('#octo_gallery_counter').css('top', (parseInt($('#octo_gallery_image').css('height')) - parseInt($('#octo_gallery_counter').css('height')))+'px')
   }
 
   function octo_open(node) {

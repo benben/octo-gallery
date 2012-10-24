@@ -36,7 +36,7 @@ a.octo_gallery {
 
 #octo_gallery_close {
   top: 20px;
-  left: 0px;
+  right: 20px;
   width: 25px;
   height: 25px;
   position: absolute;
@@ -57,9 +57,8 @@ a.octo_gallery {
 }
 
 #octo_gallery_counter {
-  top: 0px;
-  left: 0px;
-  width: 25px;
+  bottom: 20px;
+  right: 20px;
   height: 25px;
   position: absolute;
   background: #000;
@@ -71,4 +70,5 @@ a.octo_gallery {
   display: inline-block;
   line-height: 24px;
   text-align: center;
+  padding: 0px 6px;
 }
