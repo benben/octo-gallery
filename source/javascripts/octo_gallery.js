@@ -52,13 +52,15 @@ $.domReady(function () {
 
   function set_image_dimensions() {
     var body_w     = $('body').width()
-    var body_h     = $('body').height()
+    var window_h   = $(window).height()
     var original_w = $('#octo_gallery_image').attr('data-width')
     var original_h = $('#octo_gallery_image').attr('data-height')
     var current_w  = $('#octo_gallery_image_container').width()
     var current_h  = $('#octo_gallery_image_container').height()
 
-    var calculated_w = body_w - parseInt($('#octo_gallery_image').css('margin'))*2
+    var margin       = parseInt($('#octo_gallery_image').css('margin'))*2
+    var calculated_w = body_w - margin
+    var calculated_h = window_h - margin
 
     if(body_w >= current_w) {
       if (current_w < original_w) {
@@ -69,7 +71,17 @@ $.domReady(function () {
       $('#octo_gallery_image_container').css('left', 0)
       $('#octo_gallery_image').css('width', calculated_w)
     }
-    $('#octo_gallery_image_container').css('top', $('body').scrollTop()+'px')
+
+    if(window_h >= current_h) {
+      if (current_h < original_h) {
+        $('#octo_gallery_image').css('width', calculated_h)
+      }
+      $('#octo_gallery_image_container').css('top', $('body').scrollTop() + (window_h - current_h)/2 +'px')
+    } else {
+      $('#octo_gallery_image_container').css('top', $('body').scrollTop())
+      $('#octo_gallery_image').css('height', calculated_h)
+    }
+
     $('#octo_gallery_counter').css('top', (parseInt($('#octo_gallery_image').css('height')) - parseInt($('#octo_gallery_counter').css('height')))+'px')
   }
 
